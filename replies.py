@@ -4,11 +4,6 @@ import sys
 
 SAVED_REPLIES = 'reply.json'
 
-def save_replies(file, data):
-    with open(file, 'w') as f:
-        json.dump(data, f)
-
-
 def load_replies(file):
     try:
         with open(file, 'r') as f:
@@ -16,6 +11,11 @@ def load_replies(file):
             return replies
     except:
         return {}
+
+
+def save_replies(file, data):
+    with open(file, 'w') as f:
+        json.dump(data, f)
 
 
 def get_key():
@@ -29,17 +29,17 @@ def get_key():
 
 replies = load_replies(SAVED_REPLIES)
 
-
 if len(sys.argv) > 1:
     command = sys.argv[1]
-    key = get_key()
     
     if command == 'save':
+        key = get_key()
         replies[key] = clipboard.paste()
         save_replies(SAVED_REPLIES, replies)
         print(f'Reply saved under {key}.')
 
     elif command == 'load':
+        key = get_key()
         if key in replies:
             clipboard.copy(replies[key])
             print('Reply copied to clipboard.')
@@ -50,6 +50,7 @@ if len(sys.argv) > 1:
         print(replies)
 
     elif command == 'delete':
+        key = get_key()
         del replies[key]
         save_replies(SAVED_REPLIES, replies)
 
